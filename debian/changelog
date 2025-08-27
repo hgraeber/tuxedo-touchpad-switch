@@ -1,3 +1,10 @@
+tuxedo-touchpad-switch (1.1.0) noble; urgency=medium
+
+  [ Werner Sembach ]
+  * Only run on GNOME X11 as KDE and GNOME Wayland are now fixed differently
+
+ -- Tuxedo BOT <tux@tuxedocomputers.com>  Wed, 27 Aug 2025 19:47:53 +0200
+
 tuxedo-touchpad-switch (1.0.9) jammy; urgency=medium
 
   [ Werner Sembach ]
