@@ -28,7 +28,6 @@
 
 #include "touchpad-control.h"
 #include "setup-gnome.h"
-#include "setup-kde.h"
 
 using std::cout;
 using std::cerr;
@@ -40,7 +39,6 @@ static void gracefull_exit(int signum = 0) {
     int result = EXIT_SUCCESS;
     
     clean_gnome();
-    clean_kde();
     
     if (signum < 0) {
         result = EXIT_FAILURE;
@@ -96,21 +94,16 @@ int main() {
     }
     
     char *xdg_current_desktop = getenv("XDG_CURRENT_DESKTOP");
-    if (!xdg_current_desktop) {
-        cout << "Your desktop environment could not be determined." << endl;
+    char *xdg_session_type = getenv("XDG_SESSION_TYPE");
+    if (!xdg_current_desktop || !xdg_session_type) {
+        cout << "Your desktop environment or session type could not be determined." << endl;
         gracefull_exit(SIGTERM);
     }
-    else if (strstr(xdg_current_desktop, "GNOME")) {
+    else if (strstr(xdg_current_desktop, "GNOME") &&
+             strstr(xdg_session_type, "x11")) {
         int ret = setup_gnome(lockfile);
         if (ret != EXIT_SUCCESS) {
             cerr << "main(...): setup_gnome(...) failed." << endl;
-            gracefull_exit(-ret);
-        }
-    }
-    else if (strstr(xdg_current_desktop, "KDE")) {
-        int ret = setup_kde(lockfile);
-        if (ret != EXIT_SUCCESS) {
-            cerr << "main(...): setup_kde(...) failed." << endl;
             gracefull_exit(-ret);
         }
     }
